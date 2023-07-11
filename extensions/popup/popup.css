@@ -1,0 +1,16 @@
+html {
+    line-height: 1.15; /* 1 */
+    -webkit-text-size-adjust: 100%; /* 2 */
+}
+
+button {
+    margin: 5px;
+    background-color: white;
+}
+
+textarea {
+    height:150px;
+    width:500px;
+    overflow:auto;
+    background:#EEEEEE;
+}
