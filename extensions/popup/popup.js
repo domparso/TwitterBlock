@@ -2,6 +2,21 @@
 *
  */
 
+
+// 读取cookie
+var lang, ct0, headers
+
+function getUserInfo(screenName, callback) {
+    // get userid
+    twurl = "https://twitter.com/i/api/graphql/oUZZZ8Oddwxs8Cd3iW3UEA/UserByScreenName?variables=%7B%22screen_name%22%3A%22" + screenName + "%22%2C%22withSafetyModeUserFields%22%3Atrue%7D&features=%7B%22hidden_profile_likes_enabled%22%3Afalse%2C%22responsive_web_graphql_exclude_directive_enabled%22%3Atrue%2C%22verified_phone_label_enabled%22%3Afalse%2C%22subscriptions_verification_info_verified_since_enabled%22%3Atrue%2C%22highlights_tweets_tab_ui_enabled%22%3Atrue%2C%22creator_subscriptions_tweet_preview_api_enabled%22%3Atrue%2C%22responsive_web_graphql_skip_user_profile_image_extensions_enabled%22%3Afalse%2C%22responsive_web_graphql_timeline_navigation_enabled%22%3Atrue%7D"
+    client.get({
+        url: twurl,
+        headers: headers
+    }).then((data) => {
+        callback()
+    })
+}
+
 $(document).ready(() => {
     // 获取本地数据
     $(() => {
@@ -13,20 +28,18 @@ $(document).ready(() => {
             })
     })
 
-    // 读取cookie
-    var cookiesMap
-    $(() => {
-        chrome.tabs.query({'active': true, lastFocusedWindow: true},
-            (tabs) => {
-            const url = tabs[0].url
-            chrome.cookies.getAll({
-                domain: url.host
-            }, (cookies) => {
-                cookiesMap = cookies
-                // $('#custom-block-list').val(cookies.map(c => c.name+"="+c.value).join(';'))
-            })
-        })
-    })
+    // lang = getCookie("lang")
+    // ct0 = getCookie("ct0")
+    //
+    // headers = {
+    //     "Authorization": 'Bearer AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA',
+    //     "X-Csrf-Token": ct0,
+    //     "X-Twitter-Auth-Type": "OAuth2Session",
+    //     "X-Twitter-Client-Language": lang
+    // }
+
+
+    $('#custom-unblock-list').val("headers")
 
     // add block
     $('#addBlock').click(() => {
@@ -35,12 +48,27 @@ $(document).ready(() => {
         }
 
         var tmp = $('#custom-block-list').val()
-        if (tmp === '') {
-            tmp = $('#input-block').val()
-        } else {
-            tmp = $('#input-block').val() + '\n' + tmp
-        }
-        $('#custom-block-list').val(tmp)
+        name = $('#input-block').val()
+        name = 'domparso'
+        // getUserInfo(name, (data) => {
+        //     console.log(data)
+        //     try {
+        //         result = JSON.parse(data.body)
+        //     } catch (e) {
+        //         return
+        //     }
+        //     userId = result.data.user.result.rest_id
+        //     screenName = result.data.user.result.legacy.screen_name
+        //     name = result.data.user.result.legacy.name
+        //     if (tmp === '') {
+        //         tmp = $('#input-block').val()
+        //     } else {
+        //         tmp = $('#input-block').val() + '\n' + [userId, screenName, name].join(',')
+        //     }
+        //
+        //     $('#custom-block-list').val(tmp)
+        // })
+
         $('#input-block').val('')
     })
     // add unblock
@@ -77,16 +105,6 @@ $(document).ready(() => {
         }
         else {
             $('#porn').css("background-color","white")
-        }
-    })
-    // coin
-    $('#coin').click(() => {
-        color = $("#coin").css("background-color")
-        if (color == "rgb(255, 255, 255)") {
-            $('#coin').css("background-color","red")
-        }
-        else {
-            $('#coin').css("background-color","white")
         }
     })
     // other
@@ -126,21 +144,6 @@ $(document).ready(() => {
             })
         }
 
-        var coinList = ''
-        color = $("#coin").css("background-color")
-        if (color == "rgb(255, 0, 0)") {
-            client.get({
-                url: "https://raw.githubusercontent.com/domparso/TwitterBlock/master/blocklist/coin.txt"
-            }).then((data) => {
-                coinList = data.body
-                if (coinList !== '') {
-                    coinList = coinList.split('\n')
-                    blockList = blockList.concat(coinList)
-                }
-            })
-        }
-
-
         var otherList = ''
         color = $("#other").css("background-color")
         if (color == "rgb(255, 0, 0)") {
@@ -159,15 +162,6 @@ $(document).ready(() => {
             $('#saveHint').html("已生效...")
         } else {
             setTimeout(() => {
-                let ct0 = ''
-                let lang = ''
-                cookiesMap.forEach((item) => {
-                    if (item.name == 'ct0') {
-                        ct0 = item.value
-                    } else if (item.name == 'lang') {
-                        lang = item.value
-                    }
-                })
                 // client.postForm({
                 //     url: "https://twitter.com/i/api/1.1/blocks/create.json",
                 //     data: "user_id=2986012495",
@@ -183,12 +177,7 @@ $(document).ready(() => {
                         client.postForm({
                             url: "https://twitter.com/i/api/1.1/blocks/create.json?",
                             data: "user_id=" + userId,
-                            headers: {
-                                "Authorization": 'Bearer AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA',
-                                "X-Csrf-Token": ct0,
-                                "X-Twitter-Auth-Type": "OAuth2Session",
-                                "X-Twitter-Client-Language": lang
-                            }
+                            headers: headers
                         })
                     }, 2000)
                 })

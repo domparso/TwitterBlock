@@ -42,21 +42,22 @@ function getPornButton() {
           </g>
         </svg>
       </div>
+      <span style="color: orange">${label}</span>
       
-      <div class="css-1dbjc4n r-16y2uox r-1wbh5a2">
-        <div dir="ltr" class="css-901oao r-1nao33i r-1qd0xha r-a023e6 r-b88u0q r-rjixqe r-bcqeeo r-qvutc0" style="height: 20px;">
+ <!--     <div class="css-1dbjc4n r-16y2uox r-1wbh5a2">
+        <div dir="ltr" class="css-901oao r-1nao33i r-1qd0xha r-a023e6 r-b88u0q r-rjixqe r-bcqeeo r-qvutc0">
           <span class="css-901oao css-16my406 r-poiln3 r-bcqeeo r-qvutc0">${label}</span>
         </div>
-      </div>
+      </div> -->
     </div>`)
 }
 
 function getOtherButton() {
     label = ''
     if (lang === 'zh-cn') {
-        label = "标记黄推Bot"
+        label = "标记其他Bot"
     } else if (lang === 'en') {
-        label = "Mark Porn Bot"
+        label = "Mark Other Bot"
     } else {
 
     }
@@ -71,12 +72,13 @@ function getOtherButton() {
           </g>
         </svg>
       </div>
+      <span style="color: orange">${label}</span>
       
-      <div class="css-1dbjc4n r-16y2uox r-1wbh5a2">
+ <!--      <div class="css-1dbjc4n r-16y2uox r-1wbh5a2">
         <div dir="ltr" class="css-901oao r-1nao33i r-1qd0xha r-a023e6 r-b88u0q r-rjixqe r-bcqeeo r-qvutc0" style="height: 20px;">
           <span class="css-901oao css-16my406 r-poiln3 r-bcqeeo r-qvutc0">${label}</span>
         </div>
-      </div>
+      </div> -->
     </div>`)
 }
 
@@ -99,7 +101,9 @@ function watch (node, config) {
                     dropDown.append(markButton)
                     markButton.off('click').on("click", () => {
                         console.log("markButton click")
-                        followButton = dropDown.children().first().find("span")
+                        // followButton = dropDown.children().first().find("span")
+                        followButton = dropDown.find('[data-testid="block"]')
+                        console.log(followButton)
                         screen_name=followButton.text()
                         if (screen_name === '') {
                             console.log("screen_name is empty")
@@ -114,6 +118,11 @@ function watch (node, config) {
                             url: twurl,
                             headers: headers
                         }).then((data) => {
+                            try {
+                                result = JSON.parse(data.body)
+                            } catch (e) {
+                                return
+                            }
                             result = JSON.parse(data.body)
                             userId = result.data.user.result.rest_id
                             screenName = result.data.user.result.legacy.screen_name
@@ -171,8 +180,8 @@ function watch (node, config) {
                     otherButton = getOtherButton()
                     dropDown.append(otherButton)
                     otherButton.off('click').on("click", () => {
-                        console.log("markButton click")
-                        followButton = dropDown.children().first().find("span")
+                        console.log("otherButton click")
+                        followButton = dropDown.find('[data-testid="block"]')
                         screen_name=followButton.text()
                         if (screen_name === '') {
                             console.log("screen_name is empty")
@@ -187,6 +196,11 @@ function watch (node, config) {
                             url: twurl,
                             headers: headers
                         }).then((data) => {
+                            try {
+                                result = JSON.parse(data.body)
+                            } catch (e) {
+                                return
+                            }
                             result = JSON.parse(data.body)
                             userId = result.data.user.result.rest_id
                             screenName = result.data.user.result.legacy.screen_name
@@ -200,7 +214,7 @@ function watch (node, config) {
                                 headers: headers
                             }).then((data) => {
                                 console.log(data)
-                                markButton.css("background-color", "red")
+                                otherButton.css("background-color", "red")
                             })
 
                             // // send mark info
@@ -249,17 +263,6 @@ function watch (node, config) {
     observer.observe(node, config)
 }
 
-function getCookie(key) {
-    const cookies = document.cookie.split(";")
-    for (let i = 0; i < cookies.length; i++) {
-        const cookie = cookies[i].trim().split("=")
-        if (cookie[0] === key) {
-            return cookie[1]
-        }
-    }
-    return null
-}
-
 function main () {
     label = ''
     if (lang === 'zh-cn') {
@@ -274,7 +277,6 @@ function main () {
 
         AccountMenu = $('[aria-label="Account menu"]').children().eq(1).children().first().children().eq(1).find("span")
         screen_name=AccountMenu.text().substring(1)
-        console.log("screen_name", screen_name)
         if (screen_name === '') {
             return
         }
@@ -283,6 +285,11 @@ function main () {
             url: twurl,
             headers: headers
         }).then((data) => {
+            try {
+                result = JSON.parse(data.body)
+            } catch (e) {
+                return
+            }
             result = JSON.parse(data.body)
             console.log(result)
             if (result.length !== 0) {
@@ -291,7 +298,7 @@ function main () {
             }
         })
 
-        const button = $('[aria-label="' + label + '"]')
+        // const button = $('[aria-label="' + label + '"]')
         const config = { attributes: true, childList: true, subtree: true, characterData: true }
 
         watch(document, config)
