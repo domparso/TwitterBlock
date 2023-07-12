@@ -9,11 +9,17 @@ This is a chrome extension that can block twitter user.
 ## 
 
 ## chrome extension style
+
 ![](pic/087.png)
-![](pic/088.png)
+![](pic/090.png)
+
+屏蔽选项，获取github上对应的屏蔽列表，并加入到用户的屏蔽列表中
+自定义列表，为用户本地保存
+
 
 
 ### twitter 
+此功能标记并屏蔽，将被屏蔽的用户信息发送共享
 ![](pic/081.png)
 ![](pic/086.png)
 
