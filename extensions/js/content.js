@@ -81,7 +81,9 @@ function watchDOM (node, config) {
         })
 
         // on 被重复调用
-        $('[aria-label="' + moreLabel + '"]').off('click').on("click", () => {
+        // $('[aria-label="' + moreLabel + '"]')
+        more = $('[role="main"]').find('[aria-label*="Home"]').find('[aria-label="' + moreLabel + '"]')
+        more.off('click').on("click", () => {
             // console.log("click")
             setTimeout(() => {
                 const menu = $('[role="menu"]')
@@ -95,7 +97,6 @@ function watchDOM (node, config) {
                     dropDown.append(markButton)
                     markButton.off('click').on("click", () => {
                         console.log("markButton click")
-                        // followButton = dropDown.children().first().find("span")
                         followButton = dropDown.find('[data-testid="block"]')
                         console.log(followButton)
                         screen_name=followButton.text()
@@ -207,7 +208,7 @@ function watchDOM (node, config) {
                                 data: "user_id=" + userId,
                                 headers: headers
                             }).then((data) => {
-                                console.log(data)
+                                // console.log(data)
                                 otherButton.css("background-color", "red")
                             })
 
@@ -259,19 +260,6 @@ function watchDOM (node, config) {
 
 function main () {
     setTimeout(() => {
-
-        // if (lang === 'zh-cn') {
-        //     AccountMenu = $('[aria-label="账号菜单"]').children().eq(1).children().first().children().eq(1).find("span")
-        // } else if (lang === 'en') {
-        //     AccountMenu = $('[aria-label="Account menu"]').children().eq(1).children().first().children().eq(1).find("span")
-        // }
-        // screen_name=AccountMenu.text().substring(1)
-        if (lang === 'zh-cn') {
-            AccountMenu = $('[aria-label="个人资料"]')
-        } else if (lang === 'en') {
-            AccountMenu = $('[aria-label="Profile"]')
-        }
-
         profileLabel = i18n[lang]["profile"]
         AccountMenu = $('[aria-label="' + profileLabel + '"]')
         screen_name = AccountMenu.prop("href").split('/')
@@ -288,7 +276,6 @@ function main () {
         }).then((data) => {
             try {
                 result = JSON.parse(data.body)
-                console.log(result)
                 if (result.length !== 0) {
                     selfId = result.data.user.result.rest_id
                     return
@@ -298,9 +285,7 @@ function main () {
             }
         })
 
-        // const button = $('[aria-label="' + label + '"]')
         const config = { attributes: true, childList: true, subtree: true, characterData: true }
-
         watchDOM(document, config)
     }, 3000)
 }
