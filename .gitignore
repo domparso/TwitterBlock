@@ -83,5 +83,7 @@ yarn.lock
 
 # this project
 *.pem
+*.crx
 config.json
 config/base.cfg
+
