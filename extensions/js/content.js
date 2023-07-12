@@ -82,13 +82,25 @@ function getOtherButton() {
     </div>`)
 }
 
-function watch (node, config) {
+
+
+function watchDOM (node, config) {
+    moreLabel = ''
+    if (lang === 'zh-cn') {
+        moreLabel = "更多"
+    } else if (lang === 'en') {
+        moreLabel = "More"
+    } else {
+
+    }
     const observer = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {})
+        mutations.forEach((mutation) => {
+            // console.log("mutations")
+        })
 
         // on 被重复调用
-        $('[aria-label="' + label + '"]').off('click').on("click", () => {
-            console.log("click")
+        $('[aria-label="' + moreLabel + '"]').off('click').on("click", () => {
+            // console.log("click")
             setTimeout(() => {
                 const menu = $('[role="menu"]')
                 if (menu.length === 0) {
@@ -264,20 +276,25 @@ function watch (node, config) {
 }
 
 function main () {
-    label = ''
-    if (lang === 'zh-cn') {
-        label = "更多"
-    } else if (lang === 'en') {
-        label = "More"
-    } else {
-
-    }
-
     setTimeout(() => {
 
-        AccountMenu = $('[aria-label="Account menu"]').children().eq(1).children().first().children().eq(1).find("span")
-        screen_name=AccountMenu.text().substring(1)
+        // if (lang === 'zh-cn') {
+        //     AccountMenu = $('[aria-label="账号菜单"]').children().eq(1).children().first().children().eq(1).find("span")
+        // } else if (lang === 'en') {
+        //     AccountMenu = $('[aria-label="Account menu"]').children().eq(1).children().first().children().eq(1).find("span")
+        // }
+        // screen_name=AccountMenu.text().substring(1)
+
+        if (lang === 'zh-cn') {
+            AccountMenu = $('[aria-label="个人资料"]')
+        } else if (lang === 'en') {
+            AccountMenu = $('[aria-label="Profile"]')
+        }
+        screen_name = AccountMenu.prop("href").split('/')
+        screen_name=screen_name[screen_name.length-1]
+
         if (screen_name === '') {
+            console.log("screen_name is null")
             return
         }
         twurl = "https://twitter.com/i/api/graphql/oUZZZ8Oddwxs8Cd3iW3UEA/UserByScreenName?variables=%7B%22screen_name%22%3A%22" + screen_name + "%22%2C%22withSafetyModeUserFields%22%3Atrue%7D&features=%7B%22hidden_profile_likes_enabled%22%3Afalse%2C%22responsive_web_graphql_exclude_directive_enabled%22%3Atrue%2C%22verified_phone_label_enabled%22%3Afalse%2C%22subscriptions_verification_info_verified_since_enabled%22%3Atrue%2C%22highlights_tweets_tab_ui_enabled%22%3Atrue%2C%22creator_subscriptions_tweet_preview_api_enabled%22%3Atrue%2C%22responsive_web_graphql_skip_user_profile_image_extensions_enabled%22%3Afalse%2C%22responsive_web_graphql_timeline_navigation_enabled%22%3Atrue%7D"
@@ -287,13 +304,12 @@ function main () {
         }).then((data) => {
             try {
                 result = JSON.parse(data.body)
+                console.log(result)
+                if (result.length !== 0) {
+                    selfId = result.data.user.result.rest_id
+                    return
+                }
             } catch (e) {
-                return
-            }
-            result = JSON.parse(data.body)
-            console.log(result)
-            if (result.length !== 0) {
-                selfId = result.data.user.result.rest_id
                 return
             }
         })
@@ -301,7 +317,7 @@ function main () {
         // const button = $('[aria-label="' + label + '"]')
         const config = { attributes: true, childList: true, subtree: true, characterData: true }
 
-        watch(document, config)
+        watchDOM(document, config)
     }, 3000)
 }
 

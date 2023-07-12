@@ -3,8 +3,14 @@
  */
 
 
+
+
+
+
+
 // 读取cookie
 var lang, ct0, headers, cookiesMap
+
 
 function getUserInfo(screenName, callback) {
     // get userid
@@ -52,6 +58,23 @@ $(document).ready(() => {
             "X-Twitter-Client-Language": lang
         }
         // $('#custom-block-list').val(JSON.stringify(headers))
+
+        if (lang === 'en') {
+            $('#custom-block-list').val(JSON.stringify(headers))
+            $('title').text("Twitter Blocker")
+            $('#options').text("Block Options")
+            $('#porn').text("Porn Bot")
+            $('#other').text("Other Bot")
+            $('#custom-block-options').text("Custom Block List(screen_name)")
+            $('#addBlock').text("add")
+            $('#cleanBlock').text("clean")
+
+            $('#custom-unblock-options').text("Custom Unblock List(screen_name)")
+            $('#addUnblock').text("add")
+            $('#cleanUnblock').text("clean")
+            $('#save').text("Save and Set")
+        }
+
     }, 500)
 
     // 获取本地数据
