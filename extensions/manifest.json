@@ -55,11 +55,4 @@
         "*://raw.githubusercontent.com/*"
     ]
 
-//    "declarative_net_request": {
-//        "rule_resources": [{
-//            "id": "rules",
-//            "enabled": true,
-//            "path": "rules.json"
-//        }]
-//    }
 }

@@ -4,7 +4,7 @@
 
 
 // 读取cookie
-var lang, ct0, headers
+var lang, ct0, headers, cookiesMap
 
 function getUserInfo(screenName, callback) {
     // get userid
@@ -13,11 +13,47 @@ function getUserInfo(screenName, callback) {
         url: twurl,
         headers: headers
     }).then((data) => {
-        callback()
+        callback(data)
     })
 }
 
 $(document).ready(() => {
+    // 读取cookie
+    chrome.tabs.query(
+        {'active': true, lastFocusedWindow: true},
+        (tabs) => {
+            const url = tabs[0].url
+            chrome.cookies.getAll({
+                domain: url.host
+            }, (cookies) => {
+                cookiesMap = cookies
+                // $('#custom-unblock-list').val(cookies.map(c => c.name+"="+c.value).join(';'))
+            })
+        })
+
+    setTimeout(() => {
+        cookiesMap.forEach((item) => {
+            if (item.name == 'lang') {
+                lang = item.value
+            } else if (item.name == 'ct0') {
+                ct0 = item.value
+            }
+        })
+
+        if (isEmptyStr(lang) || isEmptyStr(ct0)) {
+            $('#saveHint').html('请先登录Twitter')
+            return
+        }
+
+        headers = {
+            "Authorization": 'Bearer AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA',
+            "X-Csrf-Token": ct0,
+            "X-Twitter-Auth-Type": "OAuth2Session",
+            "X-Twitter-Client-Language": lang
+        }
+        // $('#custom-block-list').val(JSON.stringify(headers))
+    }, 500)
+
     // 获取本地数据
     $(() => {
         chrome.storage.sync.get(
@@ -28,19 +64,6 @@ $(document).ready(() => {
             })
     })
 
-    // lang = getCookie("lang")
-    // ct0 = getCookie("ct0")
-    //
-    // headers = {
-    //     "Authorization": 'Bearer AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA',
-    //     "X-Csrf-Token": ct0,
-    //     "X-Twitter-Auth-Type": "OAuth2Session",
-    //     "X-Twitter-Client-Language": lang
-    // }
-
-
-    $('#custom-unblock-list').val("headers")
-
     // add block
     $('#addBlock').click(() => {
         if ($('#input-block').val() == '') {
@@ -49,25 +72,24 @@ $(document).ready(() => {
 
         var tmp = $('#custom-block-list').val()
         name = $('#input-block').val()
-        name = 'domparso'
-        // getUserInfo(name, (data) => {
-        //     console.log(data)
-        //     try {
-        //         result = JSON.parse(data.body)
-        //     } catch (e) {
-        //         return
-        //     }
-        //     userId = result.data.user.result.rest_id
-        //     screenName = result.data.user.result.legacy.screen_name
-        //     name = result.data.user.result.legacy.name
-        //     if (tmp === '') {
-        //         tmp = $('#input-block').val()
-        //     } else {
-        //         tmp = $('#input-block').val() + '\n' + [userId, screenName, name].join(',')
-        //     }
-        //
-        //     $('#custom-block-list').val(tmp)
-        // })
+        getUserInfo(name, (data) => {
+            try {
+                result = JSON.parse(data.body)
+            } catch (e) {
+                $('#saveHint').html(e)
+                return
+            }
+            userId = result.data.user.result.rest_id
+            screenName = result.data.user.result.legacy.screen_name
+            name = result.data.user.result.legacy.name
+            if (tmp === '') {
+                tmp = [userId, screenName, name].join(',')
+            } else {
+                tmp = [userId, screenName, name].join(',') + '\n' + tmp
+            }
+
+            $('#custom-block-list').val(tmp)
+        })
 
         $('#input-block').val('')
     })
@@ -78,13 +100,25 @@ $(document).ready(() => {
         }
 
         var tmp = $('#custom-unblock-list').val()
+        name = $('#input-unblock').val()
+        getUserInfo(name, (data) => {
+            try {
+                result = JSON.parse(data.body)
+            } catch (e) {
+                $('#saveHint').html(e)
+                return
+            }
+            userId = result.data.user.result.rest_id
+            screenName = result.data.user.result.legacy.screen_name
+            name = result.data.user.result.legacy.name
+            if (tmp === '') {
+                tmp = [userId, screenName, name].join(',')
+            } else {
+                tmp = [userId, screenName, name].join(',') + '\n' + tmp
+            }
 
-        if (tmp === '') {
-            tmp = $('#input-unblock').val()
-        } else {
-            tmp = $('#input-unblock').val() + '\n' + tmp
-        }
-        $('#custom-unblock-list').val(tmp)
+            $('#custom-unblock-list').val(tmp)
+        })
         $('#input-unblock').val('')
     })
 
@@ -123,6 +157,7 @@ $(document).ready(() => {
         $('#saveHint').html("正在生效...")
 
         var blockList = []
+        var unBlockList = []
         var customBlockList = $('#custom-block-list').val()
         var customUnblockList = $('#custom-unblock-list').val()
         chrome.storage.sync.set({
@@ -138,8 +173,11 @@ $(document).ready(() => {
             }).then((data) => {
                 pornList = data.body
                 if (! isEmptyStr(pornList)) {
-                    pornList = pornList.split('\n')
-                    blockList = blockList.concat(pornList)
+                    pornList.split('\n').forEach((item) => {
+                        if (item != '') {
+                            blockList.push(item.split(',')[0])
+                        }
+                    })
                 }
             })
         }
@@ -152,11 +190,25 @@ $(document).ready(() => {
             }).then((data) => {
                 otherList = data.body
                 if (otherList != '') {
-                    otherList = otherList.split('\n')
-                    blockList = blockList.concat(otherList)
+                    otherList.split('\n').forEach((item) => {
+                        if (item != '') {
+                            blockList.push(item.split(',')[0])
+                        }
+                    })
                 }
             })
         }
+
+        customBlockList.split('\n').forEach((item) => {
+            if (item != '') {
+                blockList.push(item.split(',')[0])
+            }
+        })
+        customUnblockList.split('\n').forEach((item) => {
+            if (item != '') {
+                unBlockList.push(item.split(',')[0])
+            }
+        })
 
         if (blockList.length == 0) {
             $('#saveHint').html("已生效...")
@@ -176,6 +228,30 @@ $(document).ready(() => {
                         userId = tmp[0]
                         client.postForm({
                             url: "https://twitter.com/i/api/1.1/blocks/create.json?",
+                            data: "user_id=" + userId,
+                            headers: headers
+                        })
+                    }, 2000)
+                })
+
+                $('#saveHint').html("已生效...")
+            }, 6000)
+        }
+
+        setTimeout(() => {
+            $('#saveHint').html("")
+        }, 10000)
+
+        if (unBlockList.length == 0) {
+            $('#saveHint').html("已生效...")
+        } else {
+            setTimeout(() => {
+                Array.from(new Set(unBlockList)).forEach((item) => {
+                    setTimeout(() => {
+                        tmp = item.split(',')
+                        userId = tmp[0]
+                        client.postForm({
+                            url: "https://twitter.com/i/api/1.1/blocks/destroy.json?",
                             data: "user_id=" + userId,
                             headers: headers
                         })
