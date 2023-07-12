@@ -35,7 +35,8 @@
             "js": [
                 "js/jquery-3.5.1.min.js",
                 "js/client.js",
-                "js/content.js"
+                "js/content.js",
+                "js/i18n.js"
             ],
             "css": ["css/content.css"]
         }

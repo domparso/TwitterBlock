@@ -1,5 +1,5 @@
 
-i18 = {
+i18n = {
     "en": {
         title: "Twitter Blocker",
         options: "Block Options",
@@ -17,6 +17,8 @@ i18 = {
             "Setting...",
             "Setted"
         ],
+        profile: "Profile",
+        more: "More",
         pornLabel: "Mark Porn Bot",
         otherLabel: "Mark Other Bot"
     },
@@ -38,6 +40,8 @@ i18 = {
             "正在生效...",
             "已生效..."
         ],
+        profile: "个人资料",
+        more: "更多",
         pornLabel: "标记黄推Bot",
         otherLabel: "标记其他Bot"
     }

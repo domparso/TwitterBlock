@@ -3,11 +3,6 @@
  */
 
 
-
-
-
-
-
 // 读取cookie
 var lang, ct0, headers, cookiesMap
 
@@ -47,7 +42,7 @@ $(document).ready(() => {
         })
 
         if (isEmptyStr(lang) || isEmptyStr(ct0)) {
-            $('#saveHint').html('请先登录Twitter')
+            $('#saveHint').html(i18n[lang]["hint"][0])
             return
         }
 
@@ -59,33 +54,30 @@ $(document).ready(() => {
         }
         // $('#custom-block-list').val(JSON.stringify(headers))
 
-        if (lang === 'en') {
-            $('#custom-block-list').val(JSON.stringify(headers))
-            $('title').text("Twitter Blocker")
-            $('#options').text("Block Options")
-            $('#porn').text("Porn Bot")
-            $('#other').text("Other Bot")
-            $('#custom-block-options').text("Custom Block List(screen_name)")
-            $('#addBlock').text("add")
-            $('#cleanBlock').text("clean")
+        $('title').text(i18n[lang]["title"])
+        $('#options').text(i18n[lang]["options"])
+        $('#porn').text(i18n[lang]["porn"])
+        $('#other').text(i18n[lang]["other"])
+        $('#custom-block-options').text(i18n[lang]["custom-block-options"])
+        $('#addBlock').text(i18n[lang]["addBlock"])
+        $('#cleanBlock').text(i18n[lang]["cleanBlock"])
 
-            $('#custom-unblock-options').text("Custom Unblock List(screen_name)")
-            $('#addUnblock').text("add")
-            $('#cleanUnblock').text("clean")
-            $('#save').text("Save and Set")
-        }
+        $('#custom-unblock-options').text(i18n[lang]["custom-unblock-options"])
+        $('#addUnblock').text(i18n[lang]["addUnblock"])
+        $('#cleanUnblock').text(i18n[lang]["cleanUnblock"])
+        $('#save').text(i18n[lang]["save"])
 
     }, 500)
 
     // 获取本地数据
-    $(() => {
-        chrome.storage.sync.get(
-            ['custom_block','custom_unblock'],
-            (budget) => {
-                $('#custom-block-list').val(budget.custom_block)
-                $('#custom-unblock-list').val(budget.custom_unblock)
-            })
-    })
+    // $(() => {
+    //     chrome.storage.sync.get(
+    //         ['custom_block','custom_unblock'],
+    //         (budget) => {
+    //             $('#custom-block-list').val(budget.custom_block)
+    //             $('#custom-unblock-list').val(budget.custom_unblock)
+    //         })
+    // })
 
     // add block
     $('#addBlock').click(() => {
@@ -177,7 +169,8 @@ $(document).ready(() => {
 
     // 保存数据
     $('#save').click(() => {
-        $('#saveHint').html("正在生效...")
+        // $('#saveHint').html("正在生效...")
+        $('#saveHint').html(i18n[lang]["hint"][1])
 
         var blockList = []
         var unBlockList = []
@@ -234,7 +227,8 @@ $(document).ready(() => {
         })
 
         if (blockList.length == 0) {
-            $('#saveHint').html("已生效...")
+            // $('#saveHint').html("已生效...")
+            $('#saveHint').html(i18n[lang]["hint"][2])
         } else {
             setTimeout(() => {
                 // client.postForm({
@@ -257,7 +251,7 @@ $(document).ready(() => {
                     }, 2000)
                 })
 
-                $('#saveHint').html("已生效...")
+                $('#saveHint').html(i18n[lang]["hint"][2])
             }, 6000)
         }
 
@@ -266,7 +260,7 @@ $(document).ready(() => {
         }, 10000)
 
         if (unBlockList.length == 0) {
-            $('#saveHint').html("已生效...")
+            $('#saveHint').html(i18n[lang]["hint"][2])
         } else {
             setTimeout(() => {
                 Array.from(new Set(unBlockList)).forEach((item) => {
@@ -281,7 +275,7 @@ $(document).ready(() => {
                     }, 2000)
                 })
 
-                $('#saveHint').html("已生效...")
+                $('#saveHint').html(i18n[lang]["hint"][2])
             }, 6000)
         }
 

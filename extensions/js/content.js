@@ -23,14 +23,8 @@ function getUserId(screen_name, callback) {
 
 
 function getPornButton() {
-    label = ''
-    if (lang === 'zh-cn') {
-        label = "标记黄推Bot"
-    } else if (lang === 'en') {
-        label = "Mark Porn Bot"
-    } else {
+    let label = i18n[lang]["pornLabel"]
 
-    }
     return $(`<div role="menuitem" tabindex="0"
     class="css-1dbjc4n r-1loqt21 r-18u37iz r-1ny4l3l r-ymttw5 r-1f1sjgu r-o7ynqc r-6416eg r-13qz1uu" data-testid="mark">
       <div class="css-1dbjc4n r-1777fci r-j2kj52">
@@ -53,14 +47,8 @@ function getPornButton() {
 }
 
 function getOtherButton() {
-    label = ''
-    if (lang === 'zh-cn') {
-        label = "标记其他Bot"
-    } else if (lang === 'en') {
-        label = "Mark Other Bot"
-    } else {
+    let label = i18n[lang]["otherLabel"]
 
-    }
     return $(`<div role="menuitem" tabindex="0"
     class="css-1dbjc4n r-1loqt21 r-18u37iz r-1ny4l3l r-ymttw5 r-1f1sjgu r-o7ynqc r-6416eg r-13qz1uu" data-testid="mark">
       <div class="css-1dbjc4n r-1777fci r-j2kj52">
@@ -85,14 +73,8 @@ function getOtherButton() {
 
 
 function watchDOM (node, config) {
-    moreLabel = ''
-    if (lang === 'zh-cn') {
-        moreLabel = "更多"
-    } else if (lang === 'en') {
-        moreLabel = "More"
-    } else {
+    moreLabel = i18n[lang]["more"]
 
-    }
     const observer = new MutationObserver((mutations) => {
         mutations.forEach((mutation) => {
             // console.log("mutations")
@@ -284,14 +266,16 @@ function main () {
         //     AccountMenu = $('[aria-label="Account menu"]').children().eq(1).children().first().children().eq(1).find("span")
         // }
         // screen_name=AccountMenu.text().substring(1)
-
         if (lang === 'zh-cn') {
             AccountMenu = $('[aria-label="个人资料"]')
         } else if (lang === 'en') {
             AccountMenu = $('[aria-label="Profile"]')
         }
+
+        profileLabel = i18n[lang]["profile"]
+        AccountMenu = $('[aria-label="' + profileLabel + '"]')
         screen_name = AccountMenu.prop("href").split('/')
-        screen_name=screen_name[screen_name.length-1]
+        screen_name = screen_name[screen_name.length-1]
 
         if (screen_name === '') {
             console.log("screen_name is null")
