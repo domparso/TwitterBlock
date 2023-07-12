@@ -24,12 +24,12 @@ i18n = {
     },
 
     "zh-cn": {
-        title: "推特禁用插件",
-        options: "禁用选项",
+        title: "推特屏蔽插件",
+        options: "屏蔽选项",
         porn: "黄推Bot",
         other: "其他Bot",
-        "custom-block-options": "自定义禁用列表(screen_name)",
-        "custom-unblock-options": "自定义去禁用列表(screen_name)",
+        "custom-block-options": "自定义屏蔽列表(screen_name)",
+        "custom-unblock-options": "自定义去屏蔽列表(screen_name)",
         addBlock: "添加",
         cleanBlock: "清空",
         addUnblock: "添加",
