@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-author: Reiner
-email: nbxlc@hotmail.com
+author: domparso
+email: domparso@hotmail.com
 """
 
 from simplejson import dumps, loads, load, dump
