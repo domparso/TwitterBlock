@@ -20,6 +20,7 @@ This is a chrome extension that can block twitter user.
 
 ### twitter 
 此功能标记并屏蔽，将被屏蔽的用户信息发送共享
+
 ![](pic/091.png)
 ![](pic/092.png)
 
@@ -27,6 +28,7 @@ This is a chrome extension that can block twitter user.
 ## 打包
 
 第一种方法：chrome 开发工具进行打包
+
 ![](pic/089.png)
 
 第二种方法：使用 grunt-crx 进行打包
