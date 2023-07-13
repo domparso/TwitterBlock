@@ -13,9 +13,9 @@ This is a chrome extension that can block twitter user.
 ![](pic/087.png)
 ![](pic/090.png)
 
-屏蔽选项，获取github上对应的屏蔽列表，并加入到用户的屏蔽列表中
-自定义列表，为用户本地保存
+屏蔽选项，获取github上对应的共享屏蔽列表，并加入到用户的屏蔽列表中
 
+自定义列表，为用户本地保存，不会向外界共享，一般用于自定义屏蔽，或者解除共享屏蔽账号
 
 
 ### twitter 
@@ -50,5 +50,6 @@ This is a chrome extension that can block twitter user.
 
 ## 声明
 [statement](statement.md)
+
 
 
