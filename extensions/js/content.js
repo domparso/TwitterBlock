@@ -202,7 +202,7 @@ function watchDOM (node, config) {
                             })
 
                             // share info
-                            userData = ['porn', userId, screenName, name]
+                            userData = ['porn', userId, screenName, name, selfId]
                             shareBlockTweet(
                                 userData,
                                 (data) => {
@@ -296,7 +296,7 @@ function watchDOM (node, config) {
                             })
 
                             // share info
-                            userData = ['other', userId, screenName, name]
+                            userData = ['other', userId, screenName, name, selfId]
                             shareBlockTweet(
                                 userData,
                                 (data) => {
@@ -394,7 +394,7 @@ function watchDOM (node, config) {
                             })
 
                             // share info
-                            userData = ['unblock', userId, screenName, name]
+                            userData = ['unblock', userId, screenName, name, selfId]
                             shareBlockTweet(
                                 userData,
                                 (data) => {
