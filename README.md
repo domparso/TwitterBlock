@@ -51,8 +51,3 @@ This is a chrome extension that can block twitter user.
 ## 声明
 [statement](statement.md)
 
-
-<<<<<<< HEAD
-=======
-
->>>>>>> a785433ff07788306b456011bb24465c2188ef6a
