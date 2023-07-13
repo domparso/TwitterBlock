@@ -245,3 +245,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     return true
 })
 
+chrome.runtime.onSuspend.addListener(function() {
+    // 在这里执行清理工作
+})
