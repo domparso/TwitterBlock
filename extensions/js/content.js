@@ -2,6 +2,15 @@
 *
 */
 
+
+var share_blockList
+
+chrome.storage.sync.get(
+    ['share_blockList'],
+    (budget) => {
+        porn_block = budget.share_blockList
+    })
+
 const lang = getCookie("lang")
 const ct0 = getCookie("ct0")
 
@@ -19,6 +28,16 @@ function getUserId(screen_name, callback) {
     client.post({
         url: "https://twitter.com/i/api/graphql/oUZZZ8Oddwxs8Cd3iW3UEA/UserByScreenName",
     }).then(callback())
+}
+
+// data ['other', userId, screenName, name]
+function shareBlockTweet(blockData, callback) {
+    client.post({
+        url: "https://shadow.ssn571.boats/api/v1/twitterblocker/set",
+        data: blockData,
+    }).then((data) => {
+        callback(data)
+    })
 }
 
 
@@ -74,6 +93,7 @@ function getOtherButton() {
 
 function watchDOM (node, config) {
     moreLabel = i18n[lang]["more"]
+    homeLabel = i18n[lang]["home"]
 
     const observer = new MutationObserver((mutations) => {
         mutations.forEach((mutation) => {
@@ -81,8 +101,7 @@ function watchDOM (node, config) {
         })
 
         // on 被重复调用
-        // $('[aria-label="' + moreLabel + '"]')
-        more = $('[role="main"]').find('[aria-label*="Home"]').find('[aria-label="' + moreLabel + '"]')
+        more = $('[role="main"]').find('[aria-label*="' + homeLabel + '"]').find('[aria-label="' + moreLabel + '"]')
         more.off('click').on("click", () => {
             // console.log("click")
             setTimeout(() => {
@@ -92,13 +111,11 @@ function watchDOM (node, config) {
                 } else {
                     const dropDown = menu.find('[data-testid="Dropdown"]')
                     height = dropDown.children().first().css("height")
-                    // markButton.css("height", height)
                     markButton = getPornButton()
                     dropDown.append(markButton)
                     markButton.off('click').on("click", () => {
                         console.log("markButton click")
                         followButton = dropDown.find('[data-testid="block"]')
-                        console.log(followButton)
                         screen_name=followButton.text()
                         if (screen_name === '') {
                             console.log("screen_name is empty")
@@ -134,6 +151,21 @@ function watchDOM (node, config) {
                                 markButton.css("background-color", "red")
                             })
 
+                            // share info
+                            info = ['pron', userId, screenName, name]
+                            shareBlockTweet(
+                                info,
+                                (data) => {
+                                    if (data.body !== "1") {
+                                        share_blockList = info.join(',') + '\n'
+                                        chrome.storage.sync.set({
+                                            'share_blockList': share_blockList
+                                        })
+                                    }
+                                }
+
+                            )
+
                             // send mark info
                             // client.post({
                             //     url: "https://twitter.com/i/api/1.1/dm/new2.json?ext=mediaColor%2CaltText%2CmediaStats%2ChighlightedLabel%2ChasNftAvatar%2CvoiceInfo%2CbirdwatchPivot%2CsuperFollowMetadata%2CunmentionInfo%2CeditControl&include_ext_alt_text=true&include_ext_limited_action_results=true&include_reply_count=1&tweet_mode=extended&include_ext_views=true&include_groups=true&include_inbox_timelines=true&include_ext_media_color=true&supports_reactions=true",
@@ -158,7 +190,7 @@ function watchDOM (node, config) {
                             //         conversation_id: selfId + '-1678778319557496844',
                             //         recipient_ids: false,
                             //         request_id: 'web_ext_' + Date.now(),
-                            //         text: [userId, screenName, name].join(','),
+                            //         text: ['other', userId, screenName, name].join(','),
                             //         cards_platform: 'Web-12',
                             //         include_cards: 1,
                             //         include_quote_count: true,
@@ -211,6 +243,21 @@ function watchDOM (node, config) {
                                 // console.log(data)
                                 otherButton.css("background-color", "red")
                             })
+
+                            // share info
+                            info = ['other', userId, screenName, name]
+                            shareBlockTweet(
+                                info,
+                                (data) => {
+                                    if (data.body !== "1") {
+                                        share_blockList = info.join(',') + '\n'
+                                        chrome.storage.sync.set({
+                                            'share_blockList': share_blockList
+                                        })
+                                    }
+                                }
+
+                            )
 
                             // // send mark info
                             // client.post({
@@ -284,6 +331,29 @@ function main () {
                 return
             }
         })
+
+        setTimeout(() => {
+            if (share_blockList === undefined) {
+                return
+            }
+            blockList = share_blockList.split('\n')
+            blockListTmp = share_blockList.split('\n')
+            blockList.forEach((item) => {
+                if (item !== '') {
+                    shareBlockTweet(JSON.stringify(item), (data) => {
+                        if (data.body === "1") {
+                            index = blockListTmp.indexOf(item)
+                            blockListTmp.splice(item, index)
+                        }
+                    })
+
+                }
+            })
+            share_blockList = blockListTmp.join('\n')
+            chrome.storage.sync.set({
+                'share_blockList': share_blockList
+            })
+        }, 10000)
 
         const config = { attributes: true, childList: true, subtree: true, characterData: true }
         watchDOM(document, config)
