@@ -19,5 +19,5 @@ module.exports = (grunt) => {
         }
     })
 
-    grunt.registerTask('crx', ['crx'])
+    grunt.registerTask('crxTask', ['crx'])
 }

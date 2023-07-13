@@ -44,3 +44,9 @@ This is a chrome extension that can block twitter user.
 第一种方法，直接下载 crx 文件，拖入 chrome 扩展程序中即可
 
 第二种方法，使用开发者模式，加载已解压的扩展程序，选择 extensions 文件夹即可
+
+
+## 声明
+[statement](statement.md)
+
+
