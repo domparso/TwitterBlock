@@ -42,30 +42,39 @@ def main():
     for item in unblocklist:
         userIdunBlockList.append(item.split(',')[0])
 
+
     for dir in os.listdir(cachDir):
         child_dir = os.path.join(cachDir, dir)
-        for file in os.listdir(child_dir):
-            if file == "porn":
-                tmpPornList = []
-                with open(os.path.join(child_dir, file), 'r', encoding='utf-8') as f:
-                    tmpList = f.readlines()
-                for item in tmpList:
-                    if item.split(',')[0] not in userIdPornList and item.split(',')[0] not in userIdunBlockList:
-                        tmpPornList.append(item)
-                with open(os.path.join(blockDir, 'porn.txt'), 'w+', encoding='utf-8') as f:
-                    f.writelines(tmpPornList)
-            elif file == "other":
-                tmpOtherList = []
-                with open(os.path.join(child_dir, file), 'r', encoding='utf-8') as f:
-                    tmpList = f.readlines()
-                for item in tmpList:
-                    if item.split(',')[0] not in userIdOtherList and item.split(',')[0] not in userIdunBlockList:
-                        tmpOtherList.append(item)
-                with open(os.path.join(blockDir, 'other.txt'), 'w+', encoding='utf-8') as f:
-                    f.writelines(tmpOtherList)
 
-            with open(os.path.join(blockDir, 'CHANGELOG.md'), 'w+', encoding='utf-8') as f:
-                f.writelines(file)
+        tmpPornList = []
+        with open(os.path.join(child_dir, "porn"), 'r', encoding='utf-8') as f:
+            tmpList = f.readlines()
+        for item in tmpList:
+            if item.split(',')[0] not in userIdPornList and item.split(',')[0] not in userIdunBlockList:
+                tmpPornList.append(item)
+        with open(os.path.join(blockDir, 'porn.txt'), 'w+', encoding='utf-8') as f:
+            f.writelines(tmpPornList)
+
+        tmpOtherList = []
+        with open(os.path.join(child_dir, "other"), 'r', encoding='utf-8') as f:
+            tmpList = f.readlines()
+        for item in tmpList:
+            if item.split(',')[0] not in userIdOtherList and item.split(',')[0] not in userIdunBlockList:
+                tmpOtherList.append(item)
+        with open(os.path.join(blockDir, 'other.txt'), 'w+', encoding='utf-8') as f:
+            f.writelines(tmpOtherList)
+
+        tmpUnblockList = []
+        with open(os.path.join(child_dir, "unblock"), 'r', encoding='utf-8') as f:
+            tmpList = f.readlines()
+        for item in tmpList:
+            if item.split(',')[0] not in userIdOtherList and item.split(',')[0] not in userIdunBlockList:
+                tmpOtherList.append(item)
+        with open(os.path.join(blockDir, 'other.txt'), 'w+', encoding='utf-8') as f:
+            f.writelines(tmpOtherList)
+
+        with open(os.path.join(blockDir, 'CHANGELOG.md'), 'w+', encoding='utf-8') as f:
+            f.writelines(dir)
 
 
     print("更新完成")
