@@ -47,7 +47,21 @@ This is a chrome extension that can block twitter user.
 
 第二种方法，使用开发者模式，加载已解压的扩展程序，选择 extensions 文件夹即可
 
+## 使用
 
-## 声明
-[statement](statement.md)
+### 屏蔽
+
+使用浏览器访问 twitter.com 时，点击”更多“，之后点击”标记“，标记会将此用户屏蔽并发送到对应的共享屏蔽列表中
+
+### 解除屏蔽
+
+使用浏览器访问 twitter.com 时，点击”更多“，之后点击”取消标记“，标记会将此用户接触屏蔽并发送到共享解除屏蔽列表中
+
+### APP
+
+在witter APP浏览时，发现推文下有bot，会在这条推文上点击"红心"进行标记，等之后有机会进行浏览器访问时，用插件进行标记。这样就可以将遇到烦人的bot，共享推友。
+
+
+## [声明](statement.md)
+
 

@@ -53,7 +53,8 @@
     "host_permissions": [
         "*://*.twitter.com/*",
         "*://*.github.com/*",
-        "*://raw.githubusercontent.com/*"
+        "*://raw.githubusercontent.com/*",
+        "*://example.com/*"
     ]
 
 }
