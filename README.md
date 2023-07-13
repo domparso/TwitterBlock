@@ -36,6 +36,9 @@ This is a chrome extension that can block twitter user.
     yarn global add grunt-cli
     grunt crxTask
 
+私钥文件key.pem，需要自己生成，放在 `dist/` 目录下
+打包后的文件在 `dist/` 文件夹中
+
 ## 安装
 
 第一种方法，直接下载 crx 文件，拖入 chrome 扩展程序中即可
