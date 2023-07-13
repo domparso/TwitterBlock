@@ -22,6 +22,9 @@ function packMsgReq(type, data) {
 const client = {
     request: function (options) {
         return new Promise((resolve, reject) => {
+            // Uncaught (in promise) Error: Extension context invalidated
+            if(chrome.runtime.id == undefined) return
+
             chrome.runtime.sendMessage(packMsgReq('FetchRequest', options),
                 (response) => {
                     if (response.state) {
@@ -35,9 +38,11 @@ const client = {
     },
     get: function (options) {
         return new Promise((resolve, reject) => {
+            // Uncaught (in promise) Error: Extension context invalidated
+            if(chrome.runtime.id == undefined) return
+
             chrome.runtime.sendMessage(packMsgReq('FetchGet', options),
                 (response) => {
-                    console.log("response", response)
                     if (response.state) {
                         resolve(response.data)
                     } else {
@@ -49,6 +54,9 @@ const client = {
     },
     post: function (options) {
         return new Promise((resolve, reject) => {
+            // Uncaught (in promise) Error: Extension context invalidated
+            if(chrome.runtime.id == undefined) return
+
             chrome.runtime.sendMessage(packMsgReq('FetchPost', options),
                 (response) => {
                     if (response.state) {
@@ -62,6 +70,9 @@ const client = {
     },
     postForm: function (options) {
         return new Promise((resolve, reject) => {
+            // Uncaught (in promise) Error: Extension context invalidated
+            if(chrome.runtime.id == undefined) return
+
             chrome.runtime.sendMessage(packMsgReq('FetchPostForm', options),
                 (response) => {
                     if (response.state) {

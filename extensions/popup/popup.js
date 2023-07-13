@@ -70,14 +70,14 @@ $(document).ready(() => {
     }, 500)
 
     // 获取本地数据
-    // $(() => {
-    //     chrome.storage.sync.get(
-    //         ['custom_block','custom_unblock'],
-    //         (budget) => {
-    //             $('#custom-block-list').val(budget.custom_block)
-    //             $('#custom-unblock-list').val(budget.custom_unblock)
-    //         })
-    // })
+    $(() => {
+        chrome.storage.sync.get(
+            ['custom_block','custom_unblock'],
+            (budget) => {
+                $('#custom-block-list').val(budget.custom_block)
+                $('#custom-unblock-list').val(budget.custom_unblock)
+            })
+    })
 
     // add block
     $('#addBlock').click(() => {

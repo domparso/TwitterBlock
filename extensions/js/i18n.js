@@ -19,8 +19,10 @@ i18n = {
         ],
         profile: "Profile",
         more: "More",
+        home: "Home",
         pornLabel: "Mark Porn Bot",
-        otherLabel: "Mark Other Bot"
+        otherLabel: "Mark Other Bot",
+        cancelLabel: "Cancel Mark"
     },
 
     "zh-cn": {
@@ -42,7 +44,9 @@ i18n = {
         ],
         profile: "个人资料",
         more: "更多",
+        home: "主页时间线",
         pornLabel: "标记黄推Bot",
-        otherLabel: "标记其他Bot"
+        otherLabel: "标记其他Bot",
+        cancelLabel: "取消标记"
     }
 }
