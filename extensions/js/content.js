@@ -205,7 +205,6 @@ function watchDOM (node, config) {
                             shareBlockTweet(
                                 userData,
                                 (data) => {
-                                    console.log(data)
                                     try {
                                         if (data.body === "1") {
                                             return
@@ -213,7 +212,11 @@ function watchDOM (node, config) {
                                         result = JSON.parse(data.body)
                                     } catch (e) {}
                                     console.log("result cache")
-                                    share_blockList = userData.join(',') + '\n'
+                                    if (share_blockList === 'undefined' || share_blockList === '') {
+                                        share_blockList = userData.join(',')
+                                    } else {
+                                        share_blockList = share_blockList + '\n' + userData.join(',')
+                                    }
                                     chrome.storage.sync.set({
                                         'share_blockList': share_blockList
                                     })
@@ -307,7 +310,11 @@ function watchDOM (node, config) {
                                     } catch (e) {
                                     }
                                     console.log("result cache")
-                                    share_blockList = userData.join(',') + '\n'
+                                    if (share_blockList === 'undefined' || share_blockList === '') {
+                                        share_blockList = userData.join(',')
+                                    } else {
+                                        share_blockList = share_blockList + '\n' + userData.join(',')
+                                    }
                                     chrome.storage.sync.set({
                                         'share_blockList': share_blockList
                                     })
@@ -405,7 +412,11 @@ function watchDOM (node, config) {
                                     } catch (e) {
                                     }
                                     console.log("result cache")
-                                    share_unblockList = userData.join(',') + '\n'
+                                    if (share_unblockList === 'undefined' || share_unblockList === '') {
+                                        share_unblockList = userData.join(',')
+                                    } else {
+                                        share_unblockList = share_unblockList + '\n' + userData.join(',')
+                                    }
                                     chrome.storage.sync.set({
                                         'share_unblockList': share_unblockList
                                     })
