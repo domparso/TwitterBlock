@@ -70,8 +70,11 @@ def main():
     for item in unblocklist:
         userIdunBlockList.append(item.split(',')[0])
 
-
+    today = datetime.datetime.now().strftime('%Y-%m-%d')
     for dir in os.listdir(cacheDir):
+        if dir == today:
+            continue
+
         currDate = datetime.datetime.strptime(dir, '%Y-%m-%d')
         if currDate <= lastDate:
             continue
