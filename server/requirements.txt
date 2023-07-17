@@ -1,0 +1,4 @@
+nest_asyncio==1.5.6
+simplejson==3.19.1
+SQLAlchemy==1.4.20
+tornado==6.3.2
