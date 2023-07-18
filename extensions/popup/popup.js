@@ -8,7 +8,7 @@ const SETINTERVAL = 5000
 var blockList = []
 var unBlockList = []
 // 读取cookie
-var lang, ct0, headers, cookiesMap
+var lang, ct0, headers, cookiesMap, token
 
 
 function getUserInfo(screenName, callback) {
@@ -73,11 +73,12 @@ function blockUser(userId) {
         data: "user_id=" + userId,
         headers: headers
     }).then((data) => {
-        result = JSON.parse(data.body)
-        if (result.errors) {
-            reportUserState(["banned", userId])
-        }
-
+        try {
+            result = JSON.parse(data.body)
+            if (result.errors) {
+                reportUserState(["banned", userId])
+            }
+        } catch (e) {}
     })
 }
 
@@ -86,6 +87,13 @@ function unBlockUser(userId) {
         url: "https://twitter.com/i/api/1.1/blocks/destroy.json?",
         data: "user_id=" + userId,
         headers: headers
+    }).then((data) => {
+        try {
+            result = JSON.parse(data.body)
+            if (result.errors) {
+                reportUserState(["banned", userId])
+            }
+        } catch (e) {}
     })
 }
 
@@ -137,14 +145,17 @@ $(document).ready(() => {
         $('#addUnblock').text(i18n[lang]["addUnblock"])
         $('#cleanUnblock').text(i18n[lang]["cleanUnblock"])
         $('#save').text(i18n[lang]["save"])
+        $('#mark').text(i18n[lang]["markFeature"])
+        $('#addToken').text(i18n[lang]["addToken"])
 
     }, 500)
 
     // 获取本地数据
     $(() => {
         chrome.storage.sync.get(
-            ['custom_block','custom_unblock'],
+            ['token', 'custom_block','custom_unblock'],
             (budget) => {
+                $('#input-token').val(budget.token)
                 $('#custom-block-list').val(budget.custom_block)
                 $('#custom-unblock-list').val(budget.custom_unblock)
             })
@@ -217,6 +228,17 @@ $(document).ready(() => {
         $('#custom-unblock-list').val('')
     })
 
+    // add token
+    $('#addToken').click(() => {
+        if ($('#input-token').val() == '') {
+            return
+        }
+        token = $('#input-token').val()
+        chrome.storage.sync.set({
+            'token': token
+        })
+    })
+
     // porn
     $('#porn').click(() => {
         color = $("#porn").css("background-color")
@@ -256,8 +278,12 @@ $(document).ready(() => {
                 data = result.body
                 if (data != '') {
                     data.split('\n').forEach((item) => {
-                        if (item != '') {
-                            blockList.push(item.split(',')[0])
+                        if (item != '' ) {
+                            tmp = item.split(',')
+                            if (tmp[3] !== 'abnormal') {
+                                blockList.push(tmp[0])
+                            }
+                            // blockList.push(item.split(',')[0])
                         }
                     })
                 }

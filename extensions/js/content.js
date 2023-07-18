@@ -7,11 +7,12 @@ var cache_pornblockList = []
 var cache_otherblockList = []
 var cache_unblockList = []
 
-var share_blockList, share_unblockList
+var token, share_blockList, share_unblockList
 
 chrome.storage.sync.get(
-    ['share_blockList', 'share_unblockList'],
+    ['token', 'share_blockList', 'share_unblockList'],
     (budget) => {
+        token = budget.token
         share_blockList = budget.share_blockList
         share_unblockList = budget.share_unblockList
     })
@@ -515,8 +516,10 @@ function main () {
             }
         }, 10000)
 
-        const config = { attributes: true, childList: true, subtree: true, characterData: true }
-        watchDOM(document, config)
+        if (token !== undefined && token !== '') {
+            const config = {attributes: true, childList: true, subtree: true, characterData: true}
+            watchDOM(document, config)
+        }
     }, 3000)
 }
 

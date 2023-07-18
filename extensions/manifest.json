@@ -54,7 +54,11 @@
         "*://*.twitter.com/*",
         "*://*.github.com/*",
         "*://raw.githubusercontent.com/*",
+<<<<<<< HEAD
         "*://example.com/*"
+=======
+        "*://link.fakecloud.top/*"
+>>>>>>> ff1b9a11cae70b846c02abbd3b17d37f2ef3df1a
     ]
 
 }
