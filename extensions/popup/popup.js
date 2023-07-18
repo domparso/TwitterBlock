@@ -46,6 +46,7 @@ function delayLoopUsingSetTimeout(max, callback) {
         if (index < max) {
             callback(index)
             index++
+            $('#saveHint').html(i18n[lang]["hint"][1] + ' ' + index + '(' + max + ')')
             setTimeout(loop, SETINTERVAL)
         } else {
             console.log("finish")
@@ -283,11 +284,10 @@ $(document).ready(() => {
                             if (tmp[3] !== 'abnormal') {
                                 blockList.push(tmp[0])
                             }
-                            // blockList.push(item.split(',')[0])
                         }
                     })
                 }
-                $('#custom-block-list').val(blockList.join('\n'))
+                // $('#custom-block-list').val(blockList.join('\n'))
             })
         }
 
