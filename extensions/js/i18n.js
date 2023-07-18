@@ -22,7 +22,9 @@ i18n = {
         home: "Home",
         pornLabel: "Mark Porn Bot",
         otherLabel: "Mark Other Bot",
-        cancelLabel: "Cancel Mark"
+        cancelLabel: "Cancel Mark",
+        markFeature: "Mark Share Feature",
+        addToken: "Add Token",
     },
 
     "zh-cn": {
@@ -47,6 +49,8 @@ i18n = {
         home: "主页时间线",
         pornLabel: "标记黄推Bot",
         otherLabel: "标记其他Bot",
-        cancelLabel: "取消标记"
+        cancelLabel: "取消标记",
+        markFeature: "标记共享功能",
+        addToken: "添加Token",
     }
 }

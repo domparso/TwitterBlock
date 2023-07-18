@@ -237,10 +237,10 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         }
     }).then((response) => {
         sendResponse(packMsgRep(true, response, message))
-        console.log(`消息 ${JSON.stringify(message)} 处理完成。`)
+        // console.log(`消息 ${JSON.stringify(message)} 处理完成。`)
     }).catch(e => {
         sendResponse(packMsgRep(false, e, message))
-        console.error(`消息 ${JSON.stringify(message)} 处理失败：`, e)
+        // console.error(`消息 ${JSON.stringify(message)} 处理失败：`, e)
     })
     return true
 })
