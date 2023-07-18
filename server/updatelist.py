@@ -103,8 +103,13 @@ def main():
                     unblocklist.append(item)
 
         logList.append(dir)
-    print(pornBlockList)
-    print(logList)
+    # print(pornBlockList)
+    # print(logList)
+
+    pornBlockList = list(set(pornBlockList))
+    otherBlockList = list(set(otherBlockList))
+    unblocklist = list(set(unblocklist))
+    logList = list(set(logList))
 
     with open(os.path.join(ROOT_PATH, blockDir, 'porn.txt'), 'w', encoding='utf-8') as f:
         f.write(('\n').join(pornBlockList))
