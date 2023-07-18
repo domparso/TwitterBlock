@@ -112,30 +112,48 @@ def main():
                 if not item.split(',')[0]:
                     continue
 
-                index = userIdPornList.index(item.split(',')[0])
+                try:
+                    index = userIdPornList.index(item.split(',')[0])
+                except Exception as e:
+                    index = -1
                 if index >= 0:
                     tmp = pornBlockList[index].split(',')
-                    tmp[3] = "abnormal"
+                    try:
+                        tmp[3] = "abnormal"
+                    except Exception as e:
+                        tmp.append("abnormal")
                     pornBlockList[index] = ','.join(tmp)
-                index = userIdOtherList.index(item.split(',')[0])
+                try:
+                    index = userIdOtherList.index(item.split(',')[0])
+                except Exception as e:
+                    index = -1
                 if index >= 0:
                     tmp = otherBlockList[index].split(',')
-                    tmp[3] = "abnormal"
+                    try:
+                        tmp[3] = "abnormal"
+                    except Exception as e:
+                        tmp.append("abnormal")
                     otherBlockList[index] = ','.join(tmp)
-                index = userIdunBlockList.index(item.split(',')[0])
+                try:
+                    index = userIdunBlockList.index(item.split(',')[0])
+                except Exception as e:
+                    index = -1
                 if index >= 0:
                     tmp = unblocklist[index].split(',')
-                    tmp[3] = "abnormal"
+                    try:
+                        tmp[3] = "abnormal"
+                    except Exception as e:
+                        tmp.append("abnormal")
                     unblocklist[index] = ','.join(tmp)
 
         logList.append(dir)
     print(pornBlockList)
     print(logList)
 
-    pornBlockList = list(set(pornBlockList))
-    otherBlockList = list(set(otherBlockList))
-    unblocklist = list(set(unblocklist))
-    logList = list(set(logList))
+    # pornBlockList = list(set(pornBlockList))
+    # otherBlockList = list(set(otherBlockList))
+    # unblocklist = list(set(unblocklist))
+    # logList = list(set(logList))
 
     with open(os.path.join(ROOT_PATH, blockDir, 'porn.txt'), 'w', encoding='utf-8') as f:
         f.write(('\n').join(pornBlockList))
