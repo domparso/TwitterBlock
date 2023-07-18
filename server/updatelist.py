@@ -87,6 +87,7 @@ def main():
             for item in tmpList:
                 if item.split(',')[0] and item.split(',')[0] not in userIdPornList and item.split(',')[0] not in userIdunBlockList:
                     pornBlockList.append(item)
+                    userIdPornList.append(item.split(',')[0])
 
         if os.path.exists(os.path.join(child_dir, "other")):
             with open(os.path.join(child_dir, "other"), 'r', encoding='utf-8') as f:
@@ -94,6 +95,7 @@ def main():
             for item in tmpList:
                 if item.split(',')[0] and item.split(',')[0] not in userIdOtherList and item.split(',')[0] not in userIdunBlockList:
                     otherBlockList.append(item)
+                    userIdOtherList.append(item.split(',')[0])
 
         if os.path.exists(os.path.join(child_dir, "unblock")):
             with open(os.path.join(child_dir, "unblock"), 'r', encoding='utf-8') as f:
@@ -101,10 +103,34 @@ def main():
             for item in tmpList:
                 if item.split(',')[0] and item.split(',')[0] not in userIdOtherList and item.split(',')[0] not in userIdunBlockList:
                     unblocklist.append(item)
+                    userIdunBlockList.append(item.split(',')[0])
+
+        if os.path.exists(os.path.join(child_dir, "banned")):
+            with open(os.path.join(child_dir, "banned"), 'r', encoding='utf-8') as f:
+                tmpList = f.read().split('\n')
+            for item in tmpList:
+                if not item.split(',')[0]:
+                    continue
+
+                index = userIdPornList.index(item.split(',')[0])
+                if index >= 0:
+                    tmp = pornBlockList[index].split(',')
+                    tmp[3] = "abnormal"
+                    pornBlockList[index] = ','.join(tmp)
+                index = userIdOtherList.index(item.split(',')[0])
+                if index >= 0:
+                    tmp = otherBlockList[index].split(',')
+                    tmp[3] = "abnormal"
+                    otherBlockList[index] = ','.join(tmp)
+                index = userIdunBlockList.index(item.split(',')[0])
+                if index >= 0:
+                    tmp = unblocklist[index].split(',')
+                    tmp[3] = "abnormal"
+                    unblocklist[index] = ','.join(tmp)
 
         logList.append(dir)
-    # print(pornBlockList)
-    # print(logList)
+    print(pornBlockList)
+    print(logList)
 
     pornBlockList = list(set(pornBlockList))
     otherBlockList = list(set(otherBlockList))
