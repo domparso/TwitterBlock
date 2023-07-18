@@ -17,6 +17,7 @@ This is a chrome extension that can block twitter user.
 
 自定义列表，为用户本地保存，不会向外界共享，一般用于自定义屏蔽，或者解除共享屏蔽账号
 
+注意：使用屏蔽列表时，名单很长，考虑twiter调用接口的限制，需要长时间运行，请在空闲时设置
 
 ### twitter 
 此功能标记并屏蔽，将被屏蔽的用户信息发送共享

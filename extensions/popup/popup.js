@@ -3,6 +3,10 @@
  */
 
 
+const SETINTERVAL = 5000
+
+var blockList = []
+var unBlockList = []
 // 读取cookie
 var lang, ct0, headers, cookiesMap
 
@@ -15,6 +19,73 @@ function getUserInfo(screenName, callback) {
         headers: headers
     }).then((data) => {
         callback(data)
+    })
+}
+
+function getList(filename, callback) {
+    client.get({
+        url: "https://raw.githubusercontent.com/domparso/TwitterBlock/master/blocklist/" + filename
+    }).then((data) => {
+        callback(data)
+    })
+}
+
+
+// data ['other', userId, state]
+function reportUserState(data) {
+    client.post({
+        url: "https://shadow.ssn571.boats/api/v1/twitterblocker/set",
+        data: data
+    })
+}
+
+function delayLoopUsingSetTimeout(max, callback) {
+    index = 0
+
+    function loop() {
+        if (index < max) {
+            callback(index)
+            index++
+            setTimeout(loop, SETINTERVAL)
+        } else {
+            console.log("finish")
+            $('#saveHint').html(i18n[lang]["hint"][2])
+        }
+    }
+
+    loop()
+}
+
+function recursion(index, max, callback) {
+    index = 0
+    if (index < max) {
+        callback(index)
+        index++
+        setTimeout(() => {
+            recursion(index, max, callback)
+        }, SETINTERVAL)
+    }
+}
+
+function blockUser(userId) {
+    client.postForm({
+        url: "https://twitter.com/i/api/1.1/blocks/create.json?",
+        data: "user_id=" + userId,
+        headers: headers
+    }).then((data) => {
+        result = JSON.parse(data.body)
+        if (result.errors) {
+            reportUserState(["banned", userId])
+        }
+
+    })
+}
+
+function unBlockUser(userId) {
+    client.postForm({
+        url: "https://twitter.com/i/api/1.1/blocks/destroy.json?",
+        data: "user_id=" + userId,
+        headers: headers
     })
 }
 
@@ -172,8 +243,6 @@ $(document).ready(() => {
         // $('#saveHint').html("正在生效...")
         $('#saveHint').html(i18n[lang]["hint"][1])
 
-        var blockList = []
-        var unBlockList = []
         var customBlockList = $('#custom-block-list').val()
         var customUnblockList = $('#custom-unblock-list').val()
         chrome.storage.sync.set({
@@ -181,33 +250,28 @@ $(document).ready(() => {
             'custom_unblock': customUnblockList
         })
 
-        var pornList = '';
         color = $("#porn").css("background-color")
         if (color == "rgb(255, 0, 0)") {
-            client.get({
-                url: "https://raw.githubusercontent.com/domparso/TwitterBlock/master/blocklist/porn.txt"
-            }).then((data) => {
-                pornList = data.body
-                if (! isEmptyStr(pornList)) {
-                    pornList.split('\n').forEach((item) => {
+            getList("porn.txt", (result) => {
+                data = result.body
+                if (data != '') {
+                    data.split('\n').forEach((item) => {
                         if (item != '') {
                             blockList.push(item.split(',')[0])
                         }
                     })
                 }
+                $('#custom-block-list').val(blockList.join('\n'))
             })
         }
 
-        var otherList = ''
         color = $("#other").css("background-color")
         if (color == "rgb(255, 0, 0)") {
-            client.get({
-                url: "https://raw.githubusercontent.com/domparso/TwitterBlock/master/blocklist/other.txt"
-            }).then((data) => {
-                otherList = data.body
-                if (otherList != '') {
-                    otherList.split('\n').forEach((item) => {
-                        if (item != '') {
+            getList("other.txt", (result) => {
+                data = result.body
+                if (data != '') {
+                    data.split('\n').forEach((item) => {
+                        if (item != '' && item.split(',')[0] != '') {
                             blockList.push(item.split(',')[0])
                         }
                     })
@@ -215,22 +279,17 @@ $(document).ready(() => {
             })
         }
 
-        customBlockList.split('\n').forEach((item) => {
-            if (item != '') {
-                blockList.push(item.split(',')[0])
-            }
-        })
-        customUnblockList.split('\n').forEach((item) => {
-            if (item != '') {
-                unBlockList.push(item.split(',')[0])
-            }
-        })
+        setTimeout(() => {
+            customBlockList.split('\n').forEach((item) => {
+                if (item != '') {
+                    blockList.push(item.split(',')[0])
+                }
+            })
 
-        if (blockList.length == 0) {
-            // $('#saveHint').html("已生效...")
-            $('#saveHint').html(i18n[lang]["hint"][2])
-        } else {
-            setTimeout(() => {
+            if (blockList.length == 0) {
+                // $('#saveHint').html("已生效...")
+                $('#saveHint').html(i18n[lang]["hint"][2] + '  ' + blockList.length)
+            } else {
                 // client.postForm({
                 //     url: "https://twitter.com/i/api/1.1/blocks/create.json",
                 //     data: "user_id=2986012495",
@@ -238,50 +297,35 @@ $(document).ready(() => {
                 // }).then((data) => {
                 //     // $('#custom-unblock-list').val($('#custom-unblock-list').val() + '\n' + data.body)
                 // })
-
-                Array.from(new Set(blockList)).forEach((item) => {
-                    setTimeout(() => {
-                        tmp = item.split(',')
-                        userId = tmp[0]
-                        client.postForm({
-                            url: "https://twitter.com/i/api/1.1/blocks/create.json?",
-                            data: "user_id=" + userId,
-                            headers: headers
-                        })
-                    }, 2000)
+                blockList = Array.from(new Set(blockList))
+                delayLoopUsingSetTimeout(blockList.length, (index) => {
+                    if (blockList[index] != '' && blockList[index] != undefined && blockList[index] != '\n') {
+                        blockUser(blockList[index])
+                        // $('#custom-unblock-list').val($('#custom-unblock-list').val() + '\n' + blockList[index])
+                    }
                 })
-
-                $('#saveHint').html(i18n[lang]["hint"][2])
-            }, 6000)
-        }
-
-        setTimeout(() => {
-            $('#saveHint').html("")
+            }
         }, 10000)
 
-        if (unBlockList.length == 0) {
-            $('#saveHint').html(i18n[lang]["hint"][2])
-        } else {
-            setTimeout(() => {
-                Array.from(new Set(unBlockList)).forEach((item) => {
-                    setTimeout(() => {
-                        tmp = item.split(',')
-                        userId = tmp[0]
-                        client.postForm({
-                            url: "https://twitter.com/i/api/1.1/blocks/destroy.json?",
-                            data: "user_id=" + userId,
-                            headers: headers
-                        })
-                    }, 2000)
-                })
-
-                $('#saveHint').html(i18n[lang]["hint"][2])
-            }, 6000)
-        }
-
         setTimeout(() => {
-            $('#saveHint').html("")
-        }, 10000)
+            customUnblockList.split('\n').forEach((item) => {
+                if (item != '') {
+                    unBlockList.push(item.split(',')[0])
+                }
+            })
+
+            if (unBlockList.length == 0) {
+                $('#saveHint').html(i18n[lang]["hint"][2])
+            } else {
+                unBlockList = Array.from(new Set(unBlockList))
+                delayLoopUsingSetTimeout(unBlockList.length, (index) => {
+                    if (unBlockList[index] != '' && unBlockList[index] != undefined && unBlockList[index] != '\n') {
+                        unBlockUser(unBlockList[index])
+                    }
+                })
+            }
+        }, 15000)
+
     })
 
 })
