@@ -154,6 +154,7 @@ def main():
     # otherBlockList = list(set(otherBlockList))
     # unblocklist = list(set(unblocklist))
     # logList = list(set(logList))
+    logList.sort()
 
     with open(os.path.join(ROOT_PATH, blockDir, 'porn.txt'), 'w', encoding='utf-8') as f:
         f.write(('\n').join(pornBlockList))
