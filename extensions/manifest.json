@@ -45,9 +45,7 @@
     "permissions": [
         "storage",
         "cookies",
-        "tabs",
-        "declarativeNetRequest",
-        "declarativeNetRequestFeedback"
+        "declarativeNetRequest"
     ],
 
     "host_permissions": [

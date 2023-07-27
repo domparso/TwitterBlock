@@ -100,17 +100,12 @@ function unBlockUser(userId) {
 
 $(document).ready(() => {
     // 读取cookie
-    chrome.tabs.query(
-        {'active': true, lastFocusedWindow: true},
-        (tabs) => {
-            const url = tabs[0].url
-            chrome.cookies.getAll({
-                domain: url.host
-            }, (cookies) => {
-                cookiesMap = cookies
-                // $('#custom-unblock-list').val(cookies.map(c => c.name+"="+c.value).join(';'))
-            })
-        })
+    chrome.cookies.getAll({
+        domain: "twitter.com"
+    }, (cookies) => {
+        cookiesMap = cookies
+        // $('#custom-unblock-list').val(cookies.map(c => c.name+"="+c.value).join(';'))
+    })
 
     setTimeout(() => {
         cookiesMap.forEach((item) => {
@@ -148,6 +143,8 @@ $(document).ready(() => {
         $('#save').text(i18n[lang]["save"])
         $('#mark').text(i18n[lang]["markFeature"])
         $('#addToken').text(i18n[lang]["addToken"])
+        $('#saveTokenHint').text(i18n[lang]["saveTokenHint"])
+        $('#explain').text(i18n[lang]["twitter"])
 
     }, 500)
 

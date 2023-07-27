@@ -127,13 +127,13 @@ function watchDOM (node, config) {
 
     const observer = new MutationObserver((mutations) => {
         mutations.forEach((mutation) => {
-            // console.log("mutations")
+            console.log("mutations")
         })
 
         // on 被重复调用
         more = $('[role="main"]').find('[aria-label*="' + homeLabel + '"]').find('[aria-label="' + moreLabel + '"]')
         more.off('click').on("click", () => {
-            // console.log("click")
+            console.log("click")
             setTimeout(() => {
                 const menu = $('[role="menu"]')
                 if (menu.length === 0) {
@@ -438,6 +438,10 @@ function main () {
     setTimeout(() => {
         profileLabel = i18n[lang]["profile"]
         AccountMenu = $('[aria-label="' + profileLabel + '"]')
+        if (AccountMenu.length === 0) {
+            console.log("AccountMenu not found")
+            return
+        }
         screen_name = AccountMenu.prop("href").split('/')
         screen_name = screen_name[screen_name.length-1]
 
@@ -515,11 +519,13 @@ function main () {
             }
         }, 10000)
 
+
+        // 校验token
         if (token !== undefined && token !== '') {
             const config = {attributes: true, childList: true, subtree: true, characterData: true}
             watchDOM(document, config)
         }
-    }, 3000)
+    }, 5000)
 }
 
 try {
