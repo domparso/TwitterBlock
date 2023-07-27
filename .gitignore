@@ -23,6 +23,8 @@ test*
 
 .DS_Store
 .thumbs.db
+pic/thumbs.db
+*/thumbs.db
 node_modules
 
 # Quasar core related directories

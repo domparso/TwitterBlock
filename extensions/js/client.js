@@ -98,27 +98,27 @@ function isEmptyStr (str) {
     return true
 }
 
-function getCookies (name) {
-    var cookiesMap
-    $(() => {
-        chrome.tabs.query(
-            {'active': true, lastFocusedWindow: true},
-            (tabs) => {
-                const url = tabs[0].url
-                chrome.cookies.getAll({
-                    domain: url.host
-                }, (cookies) => {
-                    cookiesMap = cookies
-                })
-        })
-    })
-    cookiesMap.forEach((item) => {
-        if (item.name == name) {
-            return item.value
-        }
-    })
-    return ''
-}
+// function getCookies (name) {
+//     var cookiesMap
+//     $(() => {
+//         chrome.tabs.query(
+//             {'active': true, lastFocusedWindow: true},
+//             (tabs) => {
+//                 const url = tabs[0].url
+//                 chrome.cookies.getAll({
+//                     domain: url.host
+//                 }, (cookies) => {
+//                     cookiesMap = cookies
+//                 })
+//         })
+//     })
+//     cookiesMap.forEach((item) => {
+//         if (item.name == name) {
+//             return item.value
+//         }
+//     })
+//     return ''
+// }
 
 function getCookie(key) {
     const cookies = document.cookie.split(";")

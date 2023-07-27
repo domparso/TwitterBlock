@@ -25,6 +25,8 @@ i18n = {
         cancelLabel: "Cancel Mark",
         markFeature: "Mark Share Feature",
         addToken: "Add Token",
+        saveTokenHint: "(Refresh Twitter after adding)",
+        twitter: "Home",
     },
 
     "zh-cn": {
@@ -52,5 +54,7 @@ i18n = {
         cancelLabel: "取消标记",
         markFeature: "标记共享功能",
         addToken: "添加Token",
+        saveTokenHint: "（添加后刷新推特页面）",
+        twitter: "主页",
     }
 }
