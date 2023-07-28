@@ -127,13 +127,13 @@ function watchDOM (node, config) {
 
     const observer = new MutationObserver((mutations) => {
         mutations.forEach((mutation) => {
-            console.log("mutations")
+            // console.log("mutations")
         })
 
         // on 被重复调用
         more = $('[role="main"]').find('[aria-label*="' + homeLabel + '"]').find('[aria-label="' + moreLabel + '"]')
         more.off('click').on("click", () => {
-            console.log("click")
+            // console.log("click")
             setTimeout(() => {
                 const menu = $('[role="menu"]')
                 if (menu.length === 0) {
