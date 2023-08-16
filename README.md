@@ -10,6 +10,8 @@ This is a chrome extension that can block twitter user.
 
 ## chrome extension style
 
+https://chrome.google.com/webstore/detail/twitter-blocker/kjefgjampccacngkcncfejifmfocejam
+
 ![](pic/087.png)
 ![](pic/090.png)
 
